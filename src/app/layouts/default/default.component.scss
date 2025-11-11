@@ -1,0 +1,60 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.is-mobile .toolbar {
+  position: fixed;
+  z-index: 2;
+}
+
+.toolbar{
+  border-bottom: 1px solid gray !important;
+}
+
+h1.app-name {
+  margin-left: .8rem;
+}
+
+.sidenav-container {
+  flex: 1;
+}
+
+.sidenav{
+  padding: 1rem;
+  border-radius: 0;
+  border-right: 1px solid gray;
+}
+
+.is-mobile .sidenav-container {
+  flex: 1 0 auto;
+}
+
+.mat-mdc-list-item-icon {
+  color: rgba(0, 0, 0, 0.54);
+}
+
+.additional-selection {
+  opacity: 0.75;
+  line-height: 1;
+}
+
+.routing{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.mat-mdc-chip-set {
+  max-width: 200px;
+  padding: 0 0 1.2rem 0;
+}

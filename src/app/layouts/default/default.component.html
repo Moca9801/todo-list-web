@@ -1,1 +1,39 @@
-<p>default works!</p>
+<div class="container" [class.is-mobile]="isMobile()">
+  <mat-toolbar class="toolbar" container-background-color>
+    <button mat-icon-button (click)="snav.toggle()"><mat-icon>menu</mat-icon></button>
+    <h1 class="app-name">To-Do List App</h1>
+    <span class="spacer"></span>
+    <button mat-icon-button >
+      <mat-icon>dark_mode</mat-icon>
+    </button>
+  </mat-toolbar>
+
+  <mat-sidenav-container class="sidenav-container" [style.marginTop.px]="isMobile() ? 56 : 0">
+    <mat-sidenav opened #snav [mode]="isMobile() ? 'over' : 'side'" [fixedInViewport]="isMobile()" fixedTopGap="56" class="sidenav" >
+      <mat-list>
+
+        <div mat-subheader>Select category:</div>
+        <mat-chip-listbox class="mat-mdc-chip-set-stacked" multiple>
+          @for (dog of bestBoys; track dog) {
+            <mat-chip-option>{{dog}}</mat-chip-option>
+          }
+        </mat-chip-listbox>
+
+        <mat-divider></mat-divider>
+        <div mat-subheader></div>
+        @for (note of notes; track note) {
+          <mat-list-item (click)="go(note.route)">
+             <button  mat-button extended  >
+              <mat-icon>{{note.icon}}</mat-icon>
+              {{note.name}}
+            </button>
+          </mat-list-item>
+        }
+      </mat-list>
+    </mat-sidenav>
+    <mat-sidenav-content class="routing">
+        <router-outlet></router-outlet>    
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>
+
