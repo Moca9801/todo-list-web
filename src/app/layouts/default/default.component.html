@@ -3,8 +3,9 @@
     <button mat-icon-button (click)="snav.toggle()"><mat-icon>menu</mat-icon></button>
     <h1 class="app-name">To-Do List App</h1>
     <span class="spacer"></span>
-    <button mat-icon-button >
-      <mat-icon>dark_mode</mat-icon>
+
+    <button mat-icon-button (click)="themeService.toggleTheme()">
+       <mat-icon> {{ (currentTheme$ | async) === 'light-mode' ? 'light_mode' : 'dark_mode' }}</mat-icon>
     </button>
   </mat-toolbar>
 

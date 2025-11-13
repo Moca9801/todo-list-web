@@ -11,6 +11,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterOutlet, Router } from '@angular/router';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
+import { Theme, ThemeService } from '../../services/theme.service';
+import { Observable } from 'rxjs';
 
 export interface Section {
   name: string;
@@ -39,38 +41,37 @@ export interface Section {
 })
 export class DefaultComponent implements OnDestroy {
   protected readonly isMobile = signal(true);
+  protected shouldRun: boolean = false;
   readonly bestBoys: string[] = ['Personal', 'Work', 'University', 'Others'];
   private _mobileQuery!: MediaQueryList; 
   private _mobileQueryListener!: () => void;
 
-  protected shouldRun: boolean = false;
-
   toppings = new FormControl('');
   toppingList: string[] = ['Extra cheese', 'Mushroom', 'Onion', 'Pepperoni', 'Sausage', 'Tomato'];
+  currentTheme$: Observable<Theme>;
 
-  // Inyectamos PLATFORM_ID
-  constructor(@Inject(PLATFORM_ID) private platformId: Object, private router: Router) {
+  constructor(
+    @Inject(PLATFORM_ID) private platformId: Object, 
+    private router: Router,
+    public themeService: ThemeService
+  ) {
     const media = inject(MediaMatcher);
+    this.currentTheme$ = this.themeService.currentTheme$;
 
-    // Comprobación de Plataforma: Solo ejecutar código de navegador en el navegador
     if (isPlatformBrowser(this.platformId)) {
-        // Inicialización de MediaMatcher y listeners (que usan window/DOM)
-        this._mobileQuery = media.matchMedia('(max-width: 600px)');
-        this.isMobile.set(this._mobileQuery.matches);
-        this._mobileQueryListener = () => this.isMobile.set(this._mobileQuery.matches);
-        this._mobileQuery.addEventListener('change', this._mobileQueryListener);
-
-        // Inicialización de shouldRun (que usa window.location.host)
-        this.shouldRun = /(^|.)(stackblitz|webcontainer).(io|com)$/.test(
-            window.location.host,
-        );
+      this._mobileQuery = media.matchMedia('(max-width: 600px)');
+      this.isMobile.set(this._mobileQuery.matches);
+      this._mobileQueryListener = () => this.isMobile.set(this._mobileQuery.matches);
+      this._mobileQuery.addEventListener('change', this._mobileQueryListener);
+      this.shouldRun = /(^|.)(stackblitz|webcontainer).(io|com)$/.test(
+        window.location.host,
+      );
     }
   }
 
   ngOnDestroy(): void {
-    // Solo intenta remover el listener si fue inicializado en el navegador y si _mobileQuery existe
     if (isPlatformBrowser(this.platformId) && this._mobileQuery) {
-        this._mobileQuery.removeEventListener('change', this._mobileQueryListener);
+      this._mobileQuery.removeEventListener('change', this._mobileQueryListener);
     }
   }
 
